@@ -23,7 +23,7 @@ endpoint:
 log:
   console: false
   # possible values: { error | warning | info | debug | trace }
-  level: warning
+  level: debug
 
 debug:
   enabled: false
@@ -62,7 +62,7 @@ kernelCollector:
   # collectNomadMetadata: true
 
 cloudCollector:
-  enabled: false
+  enabled: true
   image:
     registry: ""
     tag: ""
@@ -106,7 +106,7 @@ reducer:
   matchingShards: 1
   aggregationShards: 1
   disableInternalMetrics: true
-  disableMetrics: []
+  disableMetrics:
     ### to disable an entire metric category: ###
     # - tcp.all
     # - udp.all
@@ -176,15 +176,15 @@ reducer:
     # - ebpf_net.otlp_grpc.failed_requests
     # - ebpf_net.rpc_queue_buf_utilization
     ### to enable all metrics (including metrics turned off by default): ###
-    # - none
-  enableMetrics: []
+    - none
+  enableMetrics:
     ### Disable metrics flag is evaluated first and only then enable metric flag is evaluated. ###
     ### to enable an entire metric category: ###
-    # - tcp.all
-    # - udp.all
-    # - dns.all
-    # - http.all
-    # - ebpf_net.all
+    - tcp.all
+    - udp.all
+    - dns.all
+    - http.all
+    - ebpf_net.all
     ### to enable an individual metric: ###
     ### tcp ###
     # - tcp.bytes

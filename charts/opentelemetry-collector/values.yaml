@@ -97,6 +97,7 @@ configMap:
 # THIS OPTION IS EXPERIMENTAL AND SUBJECT TO BREAKING CHANGES
 internalTelemetryViaOTLP:
   # The endpoint where the telemetry will be exported
+  # When using OTLP/HTTP you can omit the scheme; http:// will be assumed.
   endpoint: ""
   # Optional headers to configure the exporters
   headers: []

@@ -1,3 +1,14 @@
+{{- define "opentelemetry-collector.normalizeOtlpHttpEndpoint" -}}
+{{- $endpoint := trim (default "" .) -}}
+{{- if eq $endpoint "" }}
+{{- "" -}}
+{{- else if contains "://" $endpoint }}
+{{- $endpoint -}}
+{{- else }}
+http://{{ $endpoint }}
+{{- end }}
+{{- end }}
+
 {{- define "opentelemetry-collector.otelsdkotlp.traces" -}}
 traces:
   processors:
@@ -5,7 +16,7 @@ traces:
         exporter:
           otlp:
             protocol: http/protobuf
-            endpoint: {{ default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.traces.endpoint }}
+            endpoint: {{ include "opentelemetry-collector.normalizeOtlpHttpEndpoint" (default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.traces.endpoint) | quote }}
             {{- if or .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.traces.headers }}
             headers:
               {{- toYaml (default .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.traces.headers) | nindent 14 }}
@@ -19,7 +30,7 @@ metrics:
         exporter:
           otlp:
             protocol: http/protobuf
-            endpoint: {{ default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.metrics.endpoint }}
+            endpoint: {{ include "opentelemetry-collector.normalizeOtlpHttpEndpoint" (default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.metrics.endpoint) | quote }}
             {{- if or .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.metrics.headers }}
             headers:
               {{- toYaml (default .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.metrics.headers) | nindent 14 }}
@@ -50,7 +61,7 @@ logs:
         exporter:
           otlp:
             protocol: http/protobuf
-            endpoint: {{ default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.logs.endpoint }}
+            endpoint: {{ include "opentelemetry-collector.normalizeOtlpHttpEndpoint" (default .Values.internalTelemetryViaOTLP.endpoint .Values.internalTelemetryViaOTLP.logs.endpoint) | quote }}
             {{- if or .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.logs.headers }}
             headers:
               {{- toYaml (default .Values.internalTelemetryViaOTLP.headers .Values.internalTelemetryViaOTLP.logs.headers) | nindent 14 }}

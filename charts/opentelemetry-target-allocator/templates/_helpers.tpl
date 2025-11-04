@@ -53,6 +53,7 @@ Common labels shared by all Kubernetes objects in this chart.
 {{- define "helper.commonLabels" -}}
 helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/part-of: opentelemetry-target-allocator
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{ include "helper.selectorLabels" . }}
 {{- end }}
@@ -90,4 +91,11 @@ Create the target allocator docker image name.
 */}}
 {{- define "helper.dockerImageName" -}}
 {{- printf "%s:%s" .Values.targetAllocator.image.repository (.Values.targetAllocator.image.tag | default .Chart.AppVersion) -}}
+{{- end -}}
+
+{{/*
+Create ConfigMap checksum annotation
+*/}}
+{{- define "helper.configTemplateChecksumAnnotation" -}}
+checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
 {{- end -}}
